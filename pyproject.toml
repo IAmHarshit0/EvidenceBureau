@@ -1,0 +1,24 @@
+[project]
+name = "evidence-bureau"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "IAmHarshit0", email = "iamharshit237@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "ollama>=0.6.2",
+    "pymupdf>=1.28.2",
+    "pytest>=9.1.1",
+]
+
+[project.scripts]
+evidence-bureau = "evidence_bureau:main"
+
+[build-system]
+requires = ["uv_build>=0.12.0,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+pythonpath = "."
