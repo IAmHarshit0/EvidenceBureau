@@ -1,0 +1,270 @@
+{
+    "filename": "doc.pdf",
+    "numberOfPages": 10,
+    "pages": [
+        {
+            "page_number": 1,
+            "chunk_count": 7,
+            "chunks": [
+                {
+                    "chunk_id": "page_1_chunk_1",
+                    "text": "From Communication to Behavior: An Empirical Study of Deception in Multi-Agent Systems Harshit Abstract This study investigates the role of communication constraints and personality-driven behavior in a multi-agent deception environment inspired by the game Spyfall. Agents, implemented using large language models, interact under limited information while attempting to identify hidden adversaries"
+                },
+                {
+                    "chunk_id": "page_1_chunk_2",
+                    "text": ". The initial focus of the study was to examine whether increased communication length improves deception or detection. However, experimental results indicate that extended communication, such as the addition of statements alongside clues, does not significantly enhance performance. To further explore system behavior, personality-based strategies—aggressive, conservative, and deceptive—were introduced"
+                },
+                {
+                    "chunk_id": "page_1_chunk_3",
+                    "text": ". Analysis across multiple simulation runs reveals that no single personality consistently outperforms others.  Instead, agent performance exhibits notable variability, highlighting the influence of stochastic interactions. Overall, the findings suggest that deception in multi-agent systems is not strongly determined by communication length or individual behavioral traits, but rather emerges from complex and dynamic interactions within the system"
+                },
+                {
+                    "chunk_id": "page_1_chunk_4",
+                    "text": ". 1  Introduction The motivation behind this work stems from a fundamental curiosity: does the length or mode of communication influence deception in multi-agent systems? To explore this question, we designed a simulation inspired by the social deduction game Spyfall, where agents must identify hidden adversaries while operating under limited information. Deception in multi-agent autonomous systems presents an intriguing challenge"
+                },
+                {
+                    "chunk_id": "page_1_chunk_5",
+                    "text": ". Unlike humans, autonomous agents do not possess intrinsic intent; instead, they generate behavior by learning patterns from human-generated data. With the integration of large language models (LLMs), these agents inherit not only knowledge but also behavioral tendencies reflected in human communication [3]. As a result, studying deception in such systems provides insight into how human-like strategies emerge in artificial agents"
+                },
+                {
+                    "chunk_id": "page_1_chunk_6",
+                    "text": ". Multi-agent systems have been widely studied in artificial intelligence as frameworks for modeling interaction and decision-making among autonomous entities [1, 2]. The initial hypothesis of this study was that increased communication length would improve an agent’s ability to deceive others.  Intuitively, agents with more opportunities to communicate might construct more convincing narratives or manipulate information more effectively"
+                },
+                {
+                    "chunk_id": "page_1_chunk_7",
+                    "text": ". However, experimental results contradicted this assumption. Across multiple simulations, extended communication—such as allowing both clues and statements—did not significantly improve deception or detection outcomes."
+                }
+            ]
+        },
+        {
+            "page_number": 2,
+            "chunk_count": 7,
+            "chunks": [
+                {
+                    "chunk_id": "page_2_chunk_1",
+                    "text": "This unexpected result led to further investigation. One intuitive explanation was that deception might require sustained consistency—suggesting that longer communication could expose contradictions and make deception easier to detect. However, this hypothesis was also not strongly supported by the observed results. Instead, the findings indicate that communication length alone does not play a decisive role in influencing deception outcomes in this setting"
+                },
+                {
+                    "chunk_id": "page_2_chunk_2",
+                    "text": ". To better understand the underlying dynamics, the study was extended to include personalitydriven agent behaviors, specifically aggressive, conservative, and deceptive profiles. The expectation was that behavioral differences might lead to distinct strategic advantages. However, analysis across multiple simulation batches revealed that no single personality consistently outperformed others in terms of voting accuracy or survival"
+                },
+                {
+                    "chunk_id": "page_2_chunk_3",
+                    "text": ". While certain tendencies and trade-offs were observed, the overall system exhibited significant variability. These findings suggest that deception in multi-agent systems is not governed by simple factors such as communication length or individual behavioral traits, but rather emerges from complex interactions and stochastic dynamics within the system [5, 4]"
+                },
+                {
+                    "chunk_id": "page_2_chunk_4",
+                    "text": ". This work aims to empirically evaluate how communication constraints and personality-driven behavior influence deception outcomes in a controlled multi-agent environment. 2  Methodology 2.1  Game Setup The experimental setup is inspired by the social deduction game Spyfall, adapted into a multi-agent simulation framework. The game consists of eight agents, among which two are designated as spies, while the remaining agents act as civilians"
+                },
+                {
+                    "chunk_id": "page_2_chunk_5",
+                    "text": ". Each agent is assigned a word at the start of the game. Civilians receive the same target word, whereas spies are provided with a semantically similar but distinct word. The objective of the spies is to avoid detection and survive until the end of the game, while civilians aim to correctly identify and eliminate all spies. The game terminates when the number of spies equals or exceeds the number of remaining civilians"
+                },
+                {
+                    "chunk_id": "page_2_chunk_6",
+                    "text": ". To introduce ambiguity into the system, the game utilizes predefined pairs of semantically similar words, ensuring that spies can plausibly blend in while still lacking exact knowledge of the true target word. This setup creates a controlled environment for studying deception under uncertainty. 2.2  Communication Modes Two distinct communication settings are explored: 1. Clue-Only Mode In this mode, each agent provides a single-word clue based on their assigned word"
+                },
+                {
+                    "chunk_id": "page_2_chunk_7",
+                    "text": ". No additional discussion is permitted. Voting decisions are made solely based on the clues provided by other agents. 2. Clue + Statement Mode"
+                }
+            ]
+        },
+        {
+            "page_number": 3,
+            "chunk_count": 5,
+            "chunks": [
+                {
+                    "chunk_id": "page_3_chunk_1",
+                    "text": "In this extended communication setting, agents first provide a single-word clue, followed by a one-sentence statement. This statement may include suspicions, accusations, or interpretations of other agents’ clues. Voting decisions are made based on both clues and statements"
+                },
+                {
+                    "chunk_id": "page_3_chunk_2",
+                    "text": ". 2.3  Agent Personalities To introduce behavioral diversity, agents are assigned one of three personality types: • Aggressive: More likely to accuse and vote decisively • Conservative: More cautious in making accusations • Deceptive: Focused on blending in and misleading others These personality profiles influence how agents generate clues, interpret information, and make voting decisions. 2.4  Agent Actions At each round, agents perform the following actions: 1"
+                },
+                {
+                    "chunk_id": "page_3_chunk_3",
+                    "text": ". Clue Generation Agents provide a single-word clue based on their assigned word. 2. Statement Generation (if enabled) Agents produce a one-sentence statement incorporating their interpretation of the game state, including other players’ clues. 3"
+                },
+                {
+                    "chunk_id": "page_3_chunk_4",
+                    "text": ". 3. Voting Agents vote to eliminate a player based on available information: • In Clue-Only Mode, voting is based solely on clues • In Clue + Statement Mode, voting incorporates both clues and statements The player receiving the highest number of votes is eliminated in each round. 2.5  Evaluation Metrics The system is evaluated using the following metrics: • Voting Accuracy Measures how often agents correctly identify and vote against spies"
+                },
+                {
+                    "chunk_id": "page_3_chunk_5",
+                    "text": ". • Survival Rate Tracks the proportion of agents of each personality type that survive until the end of the game. • Win Rate Measures the overall success rate of spies versus civilians across simulations. These metrics are used to assess both individual behavioral effectiveness and overall system dynamics."
+                }
+            ]
+        },
+        {
+            "page_number": 4,
+            "chunk_count": 4,
+            "chunks": [
+                {
+                    "chunk_id": "page_4_chunk_1",
+                    "text": "2.6  Experimental Setup All agents were implemented using large language model-based decision-making, enabling humanlike reasoning and communication behavior. Agent roles, personality assignments, and word pairs were randomly initialized in each simulation, ensuring diversity across runs and introducing stochasticity into the system"
+                },
+                {
+                    "chunk_id": "page_4_chunk_2",
+                    "text": ". Each experimental configuration was evaluated across multiple simulation runs (typically ranging from 100 to 250 games) to ensure robustness and reliability of the observed results. To provide a clearer understanding of the simulation workflow, the overall game process is summarized in the following pseudocode. This representation abstracts the implementation details while highlighting the sequence of agent interactions and decision-making steps within each round"
+                },
+                {
+                    "chunk_id": "page_4_chunk_3",
+                    "text": ". Initialize players with roles (spy/civilian), personalities, and assigned words Set round_count = 0 Initialize round_log = empty list While no winner is determined: Increment round_count Clue Phase For each alive player: Generate a clue based on assigned word Statement Phase (if enabled) If communication mode is \"clue + statement\": For each alive player: Generate a one-sentence statement based on game context Voting Phase For each alive player: Vote for another player based on observed"
+                },
+                {
+                    "chunk_id": "page_4_chunk_4",
+                    "text": "player: Vote for another player based on observed clues/statements Elimination Identify player with highest votes Remove that player from the game Logging Store round data: - round number - communication mode - clues - statements (if any) - votes - eliminated player and role"
+                }
+            ]
+        },
+        {
+            "page_number": 5,
+            "chunk_count": 4,
+            "chunks": [
+                {
+                    "chunk_id": "page_5_chunk_1",
+                    "text": "Win Check If win condition is met: Return winner, total rounds, and round_log End While 3  Experiments Figure 1: Spy win rate across communication modes. The minimal difference indicates that increasing communication does not significantly impact game outcomes. To evaluate the impact of communication and behavioral diversity on deception in the multiagent system, three sets of experiments were conducted: (A) Communication Analysis, (B) Personality Analysis, and (C) Composition Analysis"
+                },
+                {
+                    "chunk_id": "page_5_chunk_2",
+                    "text": ". 3.1  Communication Experiment To understand the effect of communication on deception, two distinct experimental settings were evaluated: Clue-Only Mode and Clue + Statement Mode. In the Clue-Only Mode, agents were restricted to providing a single-word clue based on their assigned word. Voting decisions were made solely on the basis of these clues, with no additional contextual information available"
+                },
+                {
+                    "chunk_id": "page_5_chunk_3",
+                    "text": ". In the Clue + Statement Mode, agents provided both a single-word clue and a one-sentence statement. The statement could include suspicions, accusations, or interpretations of other agents’ clues. Voting decisions in this mode were based on both the clues and the accompanying statements. The results of this experiment indicate that there is no significant improvement in deception or detection performance when additional communication is introduced"
+                },
+                {
+                    "chunk_id": "page_5_chunk_4",
+                    "text": ". The inclusion of one-line statements did not meaningfully enhance the agents’ ability to deceive or identify spies, suggesting"
+                }
+            ]
+        },
+        {
+            "page_number": 6,
+            "chunk_count": 6,
+            "chunks": [
+                {
+                    "chunk_id": "page_6_chunk_1",
+                    "text": "that increased communication length alone does not substantially influence deception outcomes in this setting. 3.2  Personality Experiment To further investigate system behavior, personality-driven strategies were introduced into the agent framework. Agents were assigned one of three personality types: aggressive, conservative, or deceptive"
+                },
+                {
+                    "chunk_id": "page_6_chunk_2",
+                    "text": ". The goal of this experiment was to evaluate whether behavioral differences could lead to measurable improvements in performance, particularly in terms of voting accuracy and survival rate. The results show that while personality types do exhibit minor variations in both accuracy and survival, no single personality consistently outperforms the others across simulations"
+                },
+                {
+                    "chunk_id": "page_6_chunk_3",
+                    "text": ". This indicates that, although behavioral tendencies influence agent decisions, they do not translate into a dominant or reliably superior strategy. 3.3  Composition Experiment An additional analysis was conducted to explore whether the composition of personalities within a game influences overall outcomes. Preliminary observations suggested that group composition might affect the balance between spies and civilians"
+                },
+                {
+                    "chunk_id": "page_6_chunk_4",
+                    "text": ". However, due to the high degree of randomness in personality assignment and the resulting imbalance in group distributions, the findings were inconsistent. In particular, certain composition categories were underrepresented, making it difficult to draw statistically meaningful conclusions. As a result, while composition appears to be a potentially relevant factor, this experiment did not yield conclusive evidence, and its findings are treated as exploratory"
+                },
+                {
+                    "chunk_id": "page_6_chunk_5",
+                    "text": ". 4  Results 4.1  Communication Results The effect of communication mode on game outcomes is illustrated in Figure 1. The spy win rate in the Clue-Only Mode  is 52.8%, while in the Clue + Statement Mode  it is 52.0%. The difference between the two configurations is minimal (0.8%), indicating that the addition of a one-sentence statement does not significantly alter overall game outcomes"
+                },
+                {
+                    "chunk_id": "page_6_chunk_6",
+                    "text": ". These results suggest that increasing the amount of communication does not lead to a measurable improvement in either deception or detection performance within the simulated environment. 4.2  Personality Performance The performance of different personality types was evaluated using both voting accuracy and survival rate. The results are summarized in Figure 2. Voting Accuracy • Aggressive: 26.21%"
+                }
+            ]
+        },
+        {
+            "page_number": 7,
+            "chunk_count": 2,
+            "chunks": [
+                {
+                    "chunk_id": "page_7_chunk_1",
+                    "text": "• Conservative: 24.52% • Deceptive: 26.07% The observed differences in voting accuracy across personalities are relatively small, with aggressive and deceptive agents performing slightly better than conservative agents. Survival Rate • Aggressive: 48.12% • Conservative: 51.69% • Deceptive: 51.65% In terms of survival, conservative and deceptive agents exhibit slightly higher survival rates compared to aggressive agents. However, the differences remain modest"
+                },
+                {
+                    "chunk_id": "page_7_chunk_2",
+                    "text": ". However, the differences remain modest. Figure 2: Bar chart showing accuracy and survival rate across Aggressive, Conservative, and Deceptive agents 4.3  Variability Across Simulation Batches To evaluate the consistency of results, experiments were conducted across multiple simulation batches. The observed differences between two batches of 100 simulations each are reported below. Accuracy Differences • Aggressive: +0.02 • Conservative: +0.03 • Deceptive: -0.05"
+                }
+            ]
+        },
+        {
+            "page_number": 8,
+            "chunk_count": 4,
+            "chunks": [
+                {
+                    "chunk_id": "page_8_chunk_1",
+                    "text": "Survival Rate Differences • Aggressive: +3.78% • Conservative: -0.99% • Deceptive: -6.81% These results indicate that performance metrics vary across simulation batches, with noticeable fluctuations in both accuracy and survival rates. 5  Analysis The results of the experiments indicate that no single personality consistently dominates across all performance metrics"
+                },
+                {
+                    "chunk_id": "page_8_chunk_2",
+                    "text": ". While minor differences in accuracy and survival rates are observed, these differences are relatively small and vary across simulation batches. This suggests that personality alone does not determine success in the system. The variability observed between simulation batches further reinforces this conclusion. Performance metrics such as accuracy and survival rates fluctuate across runs, indicating that the system is influenced by stochastic interactions and probabilistic decision-making"
+                },
+                {
+                    "chunk_id": "page_8_chunk_3",
+                    "text": ". As a result, outcomes are not strictly reproducible and depend on the specific dynamics of each simulation. Figure 3:  Accuracy variation across two simulation batches for different personality types, illustrating the stochastic nature of the system. This variability is illustrated in Figure 3, which compares the accuracy of different personality types across two independent simulation batches"
+                },
+                {
+                    "chunk_id": "page_8_chunk_4",
+                    "text": ".  While aggressive and conservative agents show slight improvements in the second batch, deceptive agents exhibit a noticeable decrease in performance. These fluctuations highlight the sensitivity of outcomes to interaction dynamics and reinforce the stochastic nature of the system."
+                }
+            ]
+        },
+        {
+            "page_number": 9,
+            "chunk_count": 8,
+            "chunks": [
+                {
+                    "chunk_id": "page_9_chunk_1",
+                    "text": "Among the personality types, deceptive agents exhibit the highest variability in performance. This behavior can be attributed to the nature of deceptive strategies, which rely heavily on interaction context and the responses of other agents. As a result, deceptive behavior is inherently unstable, leading to fluctuations in both accuracy and survival outcomes. The analysis also reveals the presence of behavioral trade-offs"
+                },
+                {
+                    "chunk_id": "page_9_chunk_2",
+                    "text": ". Aggressive agents tend to achieve slightly higher voting accuracy but at the cost of lower survival rates, suggesting that decisive behavior increases exposure and risk. In contrast, conservative agents demonstrate higher survival rates but lower accuracy, indicating a more cautious but less effective detection strategy. Deceptive agents, while occasionally performing well, do not provide consistent advantages due to their variability"
+                },
+                {
+                    "chunk_id": "page_9_chunk_3",
+                    "text": ". With respect to communication, the results show that increasing communication length does not significantly improve performance. The addition of one-sentence statements alongside clues results in only marginal differences in win rates, suggesting that additional communication does not meaningfully enhance either deception or detection capabilities in this setting"
+                },
+                {
+                    "chunk_id": "page_9_chunk_4",
+                    "text": ". Overall, these findings suggest that deception in multi-agent systems is not governed by simple factors such as communication length or individual personality traits.  Instead, system behavior emerges from complex interactions between agents, where stochasticity and context play a significant role in determining outcomes. 6  Limitations The findings of this study are subject to several limitations, primarily arising from the stochastic nature of the simulation environment"
+                },
+                {
+                    "chunk_id": "page_9_chunk_5",
+                    "text": ". A key limitation is the random assignment of roles and personality types across simulations. This randomness leads to imbalanced personality distributions within individual games, which in turn affects group composition and overall outcomes. As a result, certain configurations may be underrepresented, limiting the ability to draw statistically robust conclusions, particularly in composition-based analyses"
+                },
+                {
+                    "chunk_id": "page_9_chunk_6",
+                    "text": ". Additionally, the system relies on probabilistic decision-making by large language model-based agents, which introduces variability across simulation runs. This stochastic behavior reduces reproducibility and contributes to fluctuations in observed performance metrics such as accuracy and survival rates. Another limitation is the absence of controlled experimental conditions, such as fixed personality distributions or role-personality mappings"
+                },
+                {
+                    "chunk_id": "page_9_chunk_7",
+                    "text": ". Without such controls, it is difficult to isolate the effect of individual variables, as outcomes are influenced by multiple interacting factors. Future work could address these limitations by introducing controlled sampling strategies, ensuring balanced compositions, and conducting larger-scale simulations to improve statistical reliability"
+                },
+                {
+                    "chunk_id": "page_9_chunk_8",
+                    "text": ". 7  Conclusion This study explored the impact of communication constraints and personality-driven behavior in a multi-agent deception environment inspired by the game Spyfall. The primary objective was to evaluate whether increased communication and distinct personality traits lead to improved deception or detection performance."
+                }
+            ]
+        },
+        {
+            "page_number": 10,
+            "chunk_count": 4,
+            "chunks": [
+                {
+                    "chunk_id": "page_10_chunk_1",
+                    "text": "The results indicate that neither communication length nor individual personality types significantly influence overall outcomes. While minor differences were observed across personalities, no strategy consistently outperformed others. Instead, the system exhibited high variability across simulation runs, highlighting the influence of stochastic interactions. A key insight from this work is that system-level interactions play a more critical role than individual behavioral traits"
+                },
+                {
+                    "chunk_id": "page_10_chunk_2",
+                    "text": ". Deception in multi-agent systems appears to emerge from dynamic and context-dependent interactions rather than from fixed strategies. These findings also emphasize the challenges of analyzing stochastic systems without controlled experimental conditions. The lack of balanced personality distributions and the presence of randomness limit the ability to draw strong causal conclusions"
+                },
+                {
+                    "chunk_id": "page_10_chunk_3",
+                    "text": ". Future work should focus on introducing controlled experimental designs, including balanced personality assignments and reduced randomness in system initialization. Such improvements would enable more reliable evaluation of behavioral strategies and provide deeper insights into the dynamics of deception in multi-agent environments. References [1] Michael Wooldridge, An Introduction to MultiAgent Systems, John Wiley & Sons, 2009"
+                },
+                {
+                    "chunk_id": "page_10_chunk_4",
+                    "text": ". [2] Yoav Shoham and Kevin Leyton-Brown, Multiagent Systems: Algorithmic, Game-Theoretic, and Logical Foundations, Cambridge University Press, 2008. [3] OpenAI, GPT-4 Technical Report, arXiv:2303.08774, 2023. [4] Joon Sung Park  et  al.,  Generative Agents:   Interactive Simulacra  of Human Behavior, arXiv:2304.03442, 2023. [5] David Silver et al., Mastering the game of Go with deep neural networks and tree search, Nature, 529, 2016."
+                }
+            ]
+        }
+    ]
+}
