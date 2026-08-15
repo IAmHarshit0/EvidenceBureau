@@ -1,0 +1,74 @@
+[
+  {
+    "question": "What personality types were assigned to agents?",
+    "relevant_ids": ["page_3_chunk_2", "page_6_chunk_1"]
+  },
+  {
+    "question": "What is the spy win rate in Clue-Only mode vs Clue + Statement mode?",
+    "relevant_ids": ["page_6_chunk_5"]
+  },
+  {
+    "question": "What are the two communication modes explored in the study?",
+    "relevant_ids": ["page_2_chunk_6", "page_3_chunk_1"]
+  },
+  {
+    "question": "How many agents are in the game and how many are spies?",
+    "relevant_ids": ["page_2_chunk_4"]
+  },
+  {
+    "question": "What evaluation metrics were used to assess the system?",
+    "relevant_ids": ["page_3_chunk_4", "page_3_chunk_5"]
+  },
+  {
+    "question": "What is the survival rate for each personality type?",
+    "relevant_ids": ["page_7_chunk_1"]
+  },
+  {
+    "question": "What are the limitations of this study?",
+    "relevant_ids": ["page_9_chunk_5", "page_9_chunk_6", "page_9_chunk_7"]
+  },
+  {
+    "question": "What is the voting accuracy for aggressive, conservative, and deceptive agents?",
+    "relevant_ids": ["page_6_chunk_6", "page_7_chunk_1"]
+  },
+  {
+    "question": "What game is the simulation inspired by?",
+    "relevant_ids": ["page_1_chunk_1", "page_1_chunk_4", "page_2_chunk_4"]
+  },
+  {
+    "question": "How are words assigned to civilians and spies at the start of the game?",
+    "relevant_ids": ["page_2_chunk_5"]
+  },
+  {
+    "question": "What was the initial hypothesis about communication length and deception?",
+    "relevant_ids": ["page_1_chunk_6"]
+  },
+  {
+    "question": "How many simulation runs were used for each experimental configuration?",
+    "relevant_ids": ["page_4_chunk_2"]
+  },
+  {
+    "question": "What three sets of experiments were conducted in this study?",
+    "relevant_ids": ["page_5_chunk_1"]
+  },
+  {
+    "question": "What behavioral trade-offs were observed between aggressive and conservative agents?",
+    "relevant_ids": ["page_9_chunk_2"]
+  },
+  {
+    "question": "Which personality type showed the highest variability in performance and why?",
+    "relevant_ids": ["page_9_chunk_1"]
+  },
+  {
+    "question": "What conditions cause the game to terminate?",
+    "relevant_ids": ["page_2_chunk_5"]
+  },
+  {
+    "question": "What did the Composition Experiment investigate and why were its results inconclusive?",
+    "relevant_ids": ["page_6_chunk_3", "page_6_chunk_4"]
+  },
+  {
+    "question": "What future work does the study recommend to address its limitations?",
+    "relevant_ids": ["page_9_chunk_7", "page_10_chunk_3"]
+  }
+]

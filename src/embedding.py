@@ -20,9 +20,7 @@ def load_chunks(path: Path) -> list[dict]:
 
     return chunks
 
-
-def create_embeddings(chunks: list[dict]):
-    model = SentenceTransformer(MODEL_NAME)
+def create_embeddings(chunks: list[dict], model):
 
     texts = [chunk["text"] for chunk in chunks]
 
@@ -36,7 +34,7 @@ def create_embeddings(chunks: list[dict]):
 
 if __name__ == "__main__":
     chunks = load_chunks(CHUNKED_FILE)
-
+    model = SentenceTransformer(MODEL_NAME)
     embeddings = create_embeddings(chunks)
 
     print(f"Number of chunks: {len(chunks)}")

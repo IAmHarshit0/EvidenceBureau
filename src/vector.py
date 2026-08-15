@@ -8,8 +8,8 @@ MODEL_NAME = "all-MiniLM-L6-v2"
 db_path = Path("data/db")
 
 chunks = load_chunks(CHUNKED_FILE)
-embeddings = create_embeddings(chunks)
 model = SentenceTransformer(MODEL_NAME)
+embeddings = create_embeddings(chunks, model)
 
 client = chromadb.PersistentClient(path=db_path)
 collection = client.get_or_create_collection(name="knowledge")
@@ -40,13 +40,13 @@ print(f"Stored {collection.count()} chunks in ChromaDB")
 
 # print(result)
 
-query = "What happened in the personality experiment?"
+# query = "What happened in the personality experiment?"
 
-query_embedding = model.encode([query])
+# query_embedding = model.encode([query])
 
-results = collection.query(
-    query_embeddings=query_embedding.tolist(),
-    n_results=5
-)
+# results = collection.query(
+#     query_embeddings=query_embedding.tolist(),
+#     n_results=5
+# )
 
-print(results)
+# print(results["ids"][0])
