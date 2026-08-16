@@ -1,6 +1,6 @@
 import chromadb
 from pathlib import Path
-from embedding import load_chunks, create_embeddings
+from evidence_bureau.embedding import load_chunks, create_embeddings
 from sentence_transformers import SentenceTransformer
 
 CHUNKED_FILE = Path("data/chunked_output.json")

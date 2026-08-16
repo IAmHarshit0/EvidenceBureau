@@ -1,6 +1,5 @@
 from pathlib import Path
 import json
-
 from sentence_transformers import SentenceTransformer
 
 
@@ -35,7 +34,7 @@ def create_embeddings(chunks: list[dict], model):
 if __name__ == "__main__":
     chunks = load_chunks(CHUNKED_FILE)
     model = SentenceTransformer(MODEL_NAME)
-    embeddings = create_embeddings(chunks)
+    embeddings = create_embeddings(chunks, model)
 
     print(f"Number of chunks: {len(chunks)}")
     print(f"Embedding shape: {embeddings.shape}")

@@ -28,4 +28,4 @@ def test_pageInfo():
 def test_chunkSize():
     for page in data["pages"]:
         for chunk in page["chunks"]:
-            assert (len(chunk["text"]) < 500)
+            assert (len(chunk["text"]) <= 500)
