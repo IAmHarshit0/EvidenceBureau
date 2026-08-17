@@ -1,0 +1,78 @@
+{
+  "model": "qwen3.5:4b",
+  "generated_at": "2026-08-16T21:42:44.588681",
+  "results": [
+    {
+      "question": "What personality types were assigned to agents?",
+      "answer": "Based on the provided context, agents were assigned one of three personality types:\n\n*   **Aggressive:** More likely to accuse and vote decisively\n*   **Conservative:** More cautious in making accusations\n*   **Deceptive:** Focused on blending in and misleading others"
+    },
+    {
+      "question": "What is the spy win rate in Clue-Only mode vs Clue + Statement mode?",
+      "answer": "Based on the provided context, the spy win rate is **52.8%** in the Clue-Only Mode, while it is **52.0%** in the Clue + Statement Mode."
+    },
+    {
+      "question": "What are the two communication modes explored in the study?",
+      "answer": "Based on the provided context, the two distinct communication modes (or settings) explored in the study are:\n\n1.  **Clue-Only Mode**: In this mode, each agent provides a single-word clue based on their assigned word, and voting decisions are made solely on the basis of these clues without additional contextual information.\n2.  **Clue + Statement Mode**: In this mode, agents provide both a single-word clue and a one-sentence statement, and voting decisions are based on both the clues and the accompanying statements."
+    },
+    {
+      "question": "How many agents are in the game and how many are spies?",
+      "answer": "Based on the provided context, the game consists of **eight agents**, among which **two** are designated as spies.\n\nThis information is found in page_2_chunk_4."
+    },
+    {
+      "question": "What evaluation metrics were used to assess the system?",
+      "answer": "Based on the provided context, the system is evaluated using the following metrics:\n\n*   **Voting Accuracy:** Measures how often agents correctly identify and vote against spies.\n*   **Survival Rate:** Tracks the proportion of agents of each personality type that survive until the end of the game.\n*   **Win Rate:** Measures the overall success rate of spies versus civilians across simulations."
+    },
+    {
+      "question": "What is the survival rate for each personality type?",
+      "answer": "Based on the provided context, the survival rates for each personality type are:\n\n*   **Aggressive:** 48.12%\n*   **Conservative:** 51.69%\n*   **Deceptive:** 51.65%\n\nThe text notes that conservative and deceptive agents exhibit slightly higher survival rates compared to aggressive agents."
+    },
+    {
+      "question": "What are the limitations of this study?",
+      "answer": "Based on the provided context, the limitations of the study are:\n\n*   **Random assignment:** A key limitation is the random assignment of roles and personality types across simulations, which leads to imbalanced personality distributions within individual games.\n*   **Underrepresentation:** This randomness results in certain composition categories being underrepresented, leading to inconsistent findings.\n*   **Statistical conclusions:** Due to these issues, it is difficult to draw statistically robust or meaningful conclusions.\n*   **Exploratory nature:** Findings regarding composition are treated as exploratory rather than conclusive evidence."
+    },
+    {
+      "question": "What is the voting accuracy for aggressive, conservative, and deceptive agents?",
+      "answer": "Based on the provided context, the voting accuracy for each personality type is as follows:\n\n*   **Aggressive:** 26.21%\n*   **Conservative:** 24.52%\n*   **Deceptive:** 26.07%\n\nThese figures are found across different sections of the context, with Aggressive and Deceptive agents generally performing slightly better than Conservative agents in terms of voting accuracy."
+    },
+    {
+      "question": "What game is the simulation inspired by?",
+      "answer": "The simulation is inspired by the social deduction game **Spyfall**."
+    },
+    {
+      "question": "How are words assigned to civilians and spies at the start of the game?",
+      "answer": "At the start of the game, each agent is assigned a word. Civilians receive the same target word, whereas spies are provided with a semantically similar but distinct word. To introduce ambiguity, the game utilizes predefined pairs of semantically similar words."
+    },
+    {
+      "question": "What was the initial hypothesis about communication length and deception?",
+      "answer": "Based on the provided context, the initial hypothesis of the study was that **increased communication length would improve an agent's ability to deceive others**. It was intuitively believed that agents with more opportunities to communicate might construct more convincing narratives or manipulate information more effectively."
+    },
+    {
+      "question": "How many simulation runs were used for each experimental configuration?",
+      "answer": "Based on the provided context, each experimental configuration was evaluated across multiple simulation runs, typically ranging from **100 to 250 games**."
+    },
+    {
+      "question": "What three sets of experiments were conducted in this study?",
+      "answer": "Based on the provided context, the study describes the following three sets of experimental evaluations:\n\n1.  **The Communication Experiment**: This set evaluated the effect of communication on deception by comparing two distinct experimental settings: **Clue-Only Mode** and **Clue + Statement Mode**.\n2.  **Variability Across Simulation Batches**: To evaluate consistency and fluctuations in performance (such as voting accuracy and survival rates), experiments were conducted across **multiple simulation batches** (specifically, 100 simulations per batch).\n3.  **Composition Analysis Experiment**: An experiment was conducted to analyze the effect of **group composition categories** (specifically regarding imbalance in group distributions), although this analysis was treated as exploratory and the text notes it yielded inconclusive evidence due to randomness and underrepresentation of certain categories."
+    },
+    {
+      "question": "What behavioral trade-offs were observed between aggressive and conservative agents?",
+      "answer": "Based on the provided context, the behavioral trade-offs observed between aggressive and conservative agents involved a balance between voting accuracy and survival rates:\n\n*   **Aggressive agents** tended to achieve slightly higher **voting accuracy** but at the cost of **lower survival rates** (48.12%). This is attributed to their decisive behavior increasing exposure and risk.\n*   **Conservative agents** demonstrated **higher survival rates** (51.69%) but lower **voting accuracy** (24.52%), indicating a more cautious but less effective detection strategy."
+    },
+    {
+      "question": "Which personality type showed the highest variability in performance and why?",
+      "answer": "The context provided does not explicitly identify which personality type has the highest variability in performance. \n\nPage 10_chunk_1 explicitly states that \"neither communication length nor individual personality types significantly influence overall outcomes\" and attributes the system's high variability to \"stochastic interactions\" rather than personality. Additionally, while Page 8_chunk_1 lists \"Survival Rate Differences\" for various personality types (Aggressive at +3.78%, Deceptive at -6.81%, and Conservative at -0.99%), these are described as differences across simulation batches rather than a measure of variability driven by personality.\n\nThus, the text suggests that performance variability is not determined by personality types."
+    },
+    {
+      "question": "What conditions cause the game to terminate?",
+      "answer": "Based on the provided context, the game terminates when the number of spies equals or exceeds the number of remaining civilians."
+    },
+    {
+      "question": "What did the Composition Experiment investigate and why were its results inconclusive?",
+      "answer": "Based on the provided context, the **Composition Experiment** investigated whether the composition of personalities within a game influences overall outcomes, specifically exploring if group composition affects the balance between spies and civilians.\n\nThe results were **inconclusive** due to the following reasons:\n*   There was a high degree of **randomness in personality assignment**, which led to imbalanced group distributions within individual games.\n*   This imbalance resulted in **underrepresented composition categories**, making it difficult to draw statistically meaningful or robust conclusions."
+    },
+    {
+      "question": "What future work does the study recommend to address its limitations?",
+      "answer": "Based on the provided context, the study recommends addressing its limitations through future work by:\n\n*   Introducing controlled sampling strategies.\n*   Ensuring balanced compositions.\n*   Conducting larger-scale simulations.\n\nThese actions are intended to improve statistical reliability and make it easier to isolate the effect of individual variables."
+    }
+  ]
+}
