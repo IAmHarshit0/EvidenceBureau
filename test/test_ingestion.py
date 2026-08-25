@@ -1,5 +1,5 @@
 from pathlib import Path
-from src.ingestion import extract_pdf
+from src.evidence_bureau.ingestion import extract_pdf
 
 pdf_path = Path("data/doc.pdf")
 data = extract_pdf(pdf_path)

@@ -1,6 +1,6 @@
 from pathlib import Path
 from sentence_transformers import SentenceTransformer
-from src.embedding import load_chunks, create_embeddings
+from src.evidence_bureau.embedding import load_chunks, create_embeddings
 
 CHUNKED_FILE = Path("data/chunked_output.json")
 MODEL_NAME = "all-MiniLM-L6-v2"

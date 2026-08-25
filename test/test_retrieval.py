@@ -1,4 +1,4 @@
-from src.retrieval import get_collection, query
+from src.evidence_bureau.retrieval import get_collection, query
 from sentence_transformers import SentenceTransformer
 
 MODEL_NAME = "all-MiniLM-L6-v2"
