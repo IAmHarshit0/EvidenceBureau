@@ -2,7 +2,8 @@ from src.evidence_bureau.slm import retrieve_context, ask
 
 
 def test_retrieve_context_returns_formatted_chunks():
-    context = retrieve_context("What personality types were assigned to agents?")
+    result = retrieve_context("What personality types were assigned to agents?")
+    context = result[0]
     assert context
     assert "[" in context and "]" in context  # chunk_id tags present
 

@@ -4,6 +4,9 @@ from pathlib import Path
 from datetime import datetime
 from sentence_transformers import SentenceTransformer, CrossEncoder
 from evidence_bureau.retrieval import get_collection, query
+from evidence_bureau.telemetry import (
+    start_trace, finish_trace, save_trace, start_timer, elapsed_ms, record_error
+)
 
 EVAL_PATH = Path("data/eval.json")
 OUTPUT_PATH = Path("data/qa_output.json")
@@ -18,22 +21,48 @@ embed_model = SentenceTransformer(EMBED_MODEL_NAME)
 reranker = CrossEncoder("BAAI/bge-reranker-base")
 
 
-def retrieve_context(question: str) -> str:
+def retrieve_context(question: str) -> tuple[str, dict]:
+    timer = start_timer()
+
     result = query(collection, embed_model, question, n_results=RETRIEVE_N)
     ret_ids = result["ids"][0]
     ret_docs = result["documents"][0]
 
+    rerank_timer = start_timer()
     pairs = [[question, doc] for doc in ret_docs]
     scores = reranker.predict(pairs)
+    rerank_ms = elapsed_ms(rerank_timer)
 
     reranked = sorted(zip(ret_ids, ret_docs, scores), key=lambda x: x[2], reverse=True)
     top_chunks = reranked[:RERANK_K]
 
-    return "\n\n".join(f"[{chunk_id}]\n{doc}" for chunk_id, doc, _ in top_chunks)
+    context = "\n\n".join(f"[{chunk_id}]\n{doc}" for chunk_id, doc, _ in top_chunks)
+
+    retrieval_meta = {
+        "retrieve_n": RETRIEVE_N,
+        "rerank_k": RERANK_K,
+        "retrieved_ids": ret_ids,
+        "reranked_ids": [chunk_id for chunk_id, _, _ in top_chunks],
+        "rerank_ms": rerank_ms,
+        "retrieval_ms": elapsed_ms(timer),
+    }
+
+    return context, retrieval_meta
 
 
 def ask(question: str, stream: bool = False):
-    context = retrieve_context(question)
+    trace = start_trace()
+    trace["question"] = question
+    trace["model"] = CHAT_MODEL
+
+    try:
+        context, retrieval_meta = retrieve_context(question)
+        trace["retrieval"] = retrieval_meta
+    except Exception as e:
+        record_error(trace, e)
+        save_trace(finish_trace(trace))
+        raise
+
     system_prompt = (
         "You are Evidence Bureau, an evidence-first research analyst. "
         "Your job is to investigate questions using ONLY the provided evidence.\n\n"
@@ -63,18 +92,31 @@ def ask(question: str, stream: bool = False):
         {"role": "user", "content": question},
     ]
 
-    if not stream:
-        response = ollama.chat(model=CHAT_MODEL, messages=messages, options={"repeat_penalty": 1.3})
-        return response.message.content
+    generation_timer = start_timer()
 
-    # streaming path: yield content chunks as they arrive
-    full_answer = ""
-    for chunk in ollama.chat(model=CHAT_MODEL, messages=messages, options={"repeat_penalty": 1.3}, stream=True):
-        piece = chunk["message"]["content"]
-        print(piece, end="", flush=True)
-        full_answer += piece
-    print()  # newline after the streamed answer finishes
-    return full_answer
+    try:
+        if not stream:
+            response = ollama.chat(model=CHAT_MODEL, messages=messages, options={"repeat_penalty": 1.3})
+            answer = response.message.content
+        else:
+            full_answer = ""
+            for chunk in ollama.chat(model=CHAT_MODEL, messages=messages, options={"repeat_penalty": 1.3}, stream=True):
+                piece = chunk["message"]["content"]
+                print(piece, end="", flush=True)
+                full_answer += piece
+            print()
+            answer = full_answer
+    except Exception as e:
+        trace["generation_ms"] = elapsed_ms(generation_timer)
+        record_error(trace, e)
+        save_trace(finish_trace(trace))
+        raise
+
+    trace["generation_ms"] = elapsed_ms(generation_timer)
+    trace["answer"] = answer
+    save_trace(finish_trace(trace))
+
+    return answer
 
 
 def chat_loop():
@@ -90,6 +132,7 @@ def chat_loop():
         print("\nAssistant: ", end="", flush=True)
         ask(question, stream=True)
         print()
+
 
 def main():
     with open(EVAL_PATH, "r") as f:
