@@ -13,57 +13,16 @@ OUTPUT_PATH = Path("data/qa_output.json")
 
 EMBED_MODEL_NAME = "all-MiniLM-L6-v2"
 CHAT_MODEL = "qwen3.5:4b"
-RETRIEVE_N = 15
-RERANK_K = 5
+DEFAULT_RETRIEVE_N = 15
+DEFAULT_RERANK_K = 5
 
 collection = get_collection()
 embed_model = SentenceTransformer(EMBED_MODEL_NAME)
 reranker = CrossEncoder("BAAI/bge-reranker-base")
 
 
-def retrieve_context(question: str) -> tuple[str, dict]:
-    timer = start_timer()
-
-    result = query(collection, embed_model, question, n_results=RETRIEVE_N)
-    ret_ids = result["ids"][0]
-    ret_docs = result["documents"][0]
-
-    rerank_timer = start_timer()
-    pairs = [[question, doc] for doc in ret_docs]
-    scores = reranker.predict(pairs)
-    rerank_ms = elapsed_ms(rerank_timer)
-
-    reranked = sorted(zip(ret_ids, ret_docs, scores), key=lambda x: x[2], reverse=True)
-    top_chunks = reranked[:RERANK_K]
-
-    context = "\n\n".join(f"[{chunk_id}]\n{doc}" for chunk_id, doc, _ in top_chunks)
-
-    retrieval_meta = {
-        "retrieve_n": RETRIEVE_N,
-        "rerank_k": RERANK_K,
-        "retrieved_ids": ret_ids,
-        "reranked_ids": [chunk_id for chunk_id, _, _ in top_chunks],
-        "rerank_ms": rerank_ms,
-        "retrieval_ms": elapsed_ms(timer),
-    }
-
-    return context, retrieval_meta
-
-
-def ask(question: str, stream: bool = False):
-    trace = start_trace()
-    trace["question"] = question
-    trace["model"] = CHAT_MODEL
-
-    try:
-        context, retrieval_meta = retrieve_context(question)
-        trace["retrieval"] = retrieval_meta
-    except Exception as e:
-        record_error(trace, e)
-        save_trace(finish_trace(trace))
-        raise
-
-    system_prompt = (
+def build_system_prompt(context: str) -> str:
+    return (
         "You are Evidence Bureau, an evidence-first research analyst. "
         "Your job is to investigate questions using ONLY the provided evidence.\n\n"
         "RULES:\n"
@@ -87,25 +46,63 @@ def ask(question: str, stream: bool = False):
         "- Maintain an investigative, neutral tone.\n\n"
         f"PROVIDED EVIDENCE:\n{context}"
     )
+
+
+def retrieve_context(question: str, retrieve_n: int = None, rerank_k: int = None) -> tuple[str, dict]:
+    n = retrieve_n or DEFAULT_RETRIEVE_N
+    k = rerank_k or DEFAULT_RERANK_K
+
+    timer = start_timer()
+
+    result = query(collection, embed_model, question, n_results=n)
+    ret_ids = result["ids"][0]
+    ret_docs = result["documents"][0]
+
+    rerank_timer = start_timer()
+    pairs = [[question, doc] for doc in ret_docs]
+    scores = reranker.predict(pairs)
+    rerank_ms = elapsed_ms(rerank_timer)
+
+    reranked = sorted(zip(ret_ids, ret_docs, scores), key=lambda x: x[2], reverse=True)
+    top_chunks = reranked[:k]
+
+    context = "\n\n".join(f"[{chunk_id}]\n{doc}" for chunk_id, doc, _ in top_chunks)
+
+    retrieval_meta = {
+        "retrieve_n": n,
+        "rerank_k": k,
+        "retrieved_ids": ret_ids,
+        "reranked_ids": [chunk_id for chunk_id, _, _ in top_chunks],
+        "rerank_ms": rerank_ms,
+        "retrieval_ms": elapsed_ms(timer),
+    }
+
+    return context, retrieval_meta
+
+
+def generate_answer(question: str, retrieve_n: int = None, rerank_k: int = None) -> dict:
+    """Non-streaming: retrieves context, calls the model once, returns full answer + metadata."""
+    trace = start_trace()
+    trace["question"] = question
+    trace["model"] = CHAT_MODEL
+
+    try:
+        context, retrieval_meta = retrieve_context(question, retrieve_n, rerank_k)
+        trace["retrieval"] = retrieval_meta
+    except Exception as e:
+        record_error(trace, e)
+        save_trace(finish_trace(trace))
+        raise
+
     messages = [
-        {"role": "system", "content": system_prompt},
+        {"role": "system", "content": build_system_prompt(context)},
         {"role": "user", "content": question},
     ]
 
     generation_timer = start_timer()
-
     try:
-        if not stream:
-            response = ollama.chat(model=CHAT_MODEL, messages=messages, options={"repeat_penalty": 1.3})
-            answer = response.message.content
-        else:
-            full_answer = ""
-            for chunk in ollama.chat(model=CHAT_MODEL, messages=messages, options={"repeat_penalty": 1.3}, stream=True):
-                piece = chunk["message"]["content"]
-                print(piece, end="", flush=True)
-                full_answer += piece
-            print()
-            answer = full_answer
+        response = ollama.chat(model=CHAT_MODEL, messages=messages, options={"repeat_penalty": 1.3})
+        answer = response.message.content
     except Exception as e:
         trace["generation_ms"] = elapsed_ms(generation_timer)
         record_error(trace, e)
@@ -116,7 +113,60 @@ def ask(question: str, stream: bool = False):
     trace["answer"] = answer
     save_trace(finish_trace(trace))
 
-    return answer
+    return {
+        "answer": answer,
+        "trace_id": trace["trace_id"],
+        "retrieval": retrieval_meta,
+        "generation_ms": trace["generation_ms"],
+    }
+
+
+def stream_answer(question: str, retrieve_n: int = None, rerank_k: int = None):
+    """
+    Streaming: yields dicts as generation progresses.
+    Caller (CLI or API) decides how to render each piece.
+    Always yields a final {"event": "done", ...} item, or {"event": "error", ...} on failure.
+    """
+    trace = start_trace()
+    trace["question"] = question
+    trace["model"] = CHAT_MODEL
+
+    try:
+        context, retrieval_meta = retrieve_context(question, retrieve_n, rerank_k)
+        trace["retrieval"] = retrieval_meta
+    except Exception as e:
+        record_error(trace, e)
+        save_trace(finish_trace(trace))
+        yield {"event": "error", "message": str(e)}
+        return
+
+    yield {"event": "start", "trace_id": trace["trace_id"], "retrieval": retrieval_meta}
+
+    messages = [
+        {"role": "system", "content": build_system_prompt(context)},
+        {"role": "user", "content": question},
+    ]
+
+    generation_timer = start_timer()
+    full_answer = ""
+
+    try:
+        for chunk in ollama.chat(model=CHAT_MODEL, messages=messages, options={"repeat_penalty": 1.3}, stream=True):
+            piece = chunk["message"]["content"]
+            full_answer += piece
+            yield {"event": "token", "content": piece}
+    except Exception as e:
+        trace["generation_ms"] = elapsed_ms(generation_timer)
+        record_error(trace, e)
+        save_trace(finish_trace(trace))
+        yield {"event": "error", "message": str(e)}
+        return
+
+    trace["generation_ms"] = elapsed_ms(generation_timer)
+    trace["answer"] = full_answer
+    save_trace(finish_trace(trace))
+
+    yield {"event": "done", "answer": full_answer, "generation_ms": trace["generation_ms"]}
 
 
 def chat_loop():
@@ -130,7 +180,11 @@ def chat_loop():
             continue
 
         print("\nAssistant: ", end="", flush=True)
-        ask(question, stream=True)
+        for event in stream_answer(question):
+            if event["event"] == "token":
+                print(event["content"], end="", flush=True)
+            elif event["event"] == "error":
+                print(f"\n[error] {event['message']}")
         print()
 
 
@@ -144,10 +198,10 @@ def main():
         question = item["question"]
         print(f"[{i}/{len(eval_data)}] {question}")
 
-        answer = ask(question)
+        result = generate_answer(question)
         results.append({
             "question": question,
-            "answer": answer
+            "answer": result["answer"]
         })
 
     output = {
