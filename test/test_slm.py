@@ -1,4 +1,4 @@
-from src.evidence_bureau.slm import retrieve_context, ask
+from src.evidence_bureau.slm import retrieve_context, generate_answer
 
 
 def test_retrieve_context_returns_formatted_chunks():
@@ -9,12 +9,6 @@ def test_retrieve_context_returns_formatted_chunks():
 
 
 def test_ask_returns_non_empty_answer():
-    answer = ask("What game is the simulation inspired by?", stream=False)
+    answer = generate_answer("What game is the simulation inspired by?")
     assert answer
-    assert isinstance(answer, str)
-
-
-if __name__ == "__main__":
-    test_retrieve_context_returns_formatted_chunks()
-    test_ask_returns_non_empty_answer()
-    print("All tests passed.")
+    assert isinstance(answer["answer"], str)

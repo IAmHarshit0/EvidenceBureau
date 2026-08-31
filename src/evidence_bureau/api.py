@@ -1,7 +1,7 @@
 # PYTHONPATH=src uv run uvicorn evidence_bureau.api:app --reload --port 8000
 
 import json
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
@@ -30,13 +30,18 @@ class AskRequest(BaseModel):
 def health():
     try:
         count = collection.count()
+
         return {
             "status": "ok",
             "model": CHAT_MODEL,
             "collection_count": count,
         }
+
     except Exception as e:
-        return {"status": "error", "detail": str(e)}
+        raise HTTPException(
+            status_code=503,
+            detail=str(e),
+        )
 
 
 @app.post("/ask")
