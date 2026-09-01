@@ -51,3 +51,20 @@ export async function askStreaming(
     }
   }
 }
+
+export async function uploadDocument(file, onProgress) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch(`${API_BASE}/process_document`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || `Upload failed: ${res.status}`);
+  }
+
+  return res.json();
+}
