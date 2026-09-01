@@ -44,7 +44,7 @@ def finish_trace(trace: dict) -> dict:
 def record_error(
     trace: dict,
     error: Exception,
-    stage: str,
+    stage: str | None = None,
 ) -> dict:
     """Mark a trace as failed and attach error details."""
 

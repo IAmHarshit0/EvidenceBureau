@@ -2,8 +2,7 @@ import json
 import ollama
 from pathlib import Path
 from datetime import datetime
-from sentence_transformers import SentenceTransformer, CrossEncoder
-from evidence_bureau.retrieval import get_collection, query
+from evidence_bureau.resources import collection, embed_model, reranker, CHAT_MODEL
 from evidence_bureau.telemetry import (
     start_trace, finish_trace, save_trace, start_timer, elapsed_ms, record_error
 )
@@ -11,14 +10,8 @@ from evidence_bureau.telemetry import (
 EVAL_PATH = Path("data/eval.json")
 OUTPUT_PATH = Path("data/qa_output.json")
 
-EMBED_MODEL_NAME = "all-MiniLM-L6-v2"
-CHAT_MODEL = "qwen3.5:4b"
 DEFAULT_RETRIEVE_N = 15
 DEFAULT_RERANK_K = 5
-
-collection = get_collection()
-embed_model = SentenceTransformer(EMBED_MODEL_NAME)
-reranker = CrossEncoder("BAAI/bge-reranker-base")
 
 
 def build_system_prompt(context: str) -> str:
@@ -54,7 +47,10 @@ def retrieve_context(question: str, retrieve_n: int = None, rerank_k: int = None
 
     timer = start_timer()
 
-    result = query(collection, embed_model, question, n_results=n)
+    result = collection.query(
+        query_embeddings=embed_model.encode([question]).tolist(),
+        n_results=n,
+    )
     ret_ids = result["ids"][0]
     ret_docs = result["documents"][0]
 

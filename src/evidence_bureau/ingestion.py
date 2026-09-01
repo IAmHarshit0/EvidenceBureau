@@ -7,7 +7,7 @@ def extract_pdf(pdf_path: Path) -> dict:
     doc = pymupdf.open(pdf_path)
 
     pdf_data = {
-        "filename": pdf_path.name,
+        "filename": Path(pdf_path).name,
         "numberOfPages": len(doc),
         "pages": [],
     }
@@ -22,7 +22,6 @@ def extract_pdf(pdf_path: Path) -> dict:
         })
 
     doc.close()
-
     return pdf_data
 
 
@@ -30,11 +29,10 @@ def save_json(data: dict, output_path: Path) -> None:
     with open(output_path, "w", encoding="utf-8") as out:
         json.dump(data, out, ensure_ascii=False, indent=4)
 
-if __name__ == "__main__":
-    pdf_path = Path("../data/doc.pdf")
-    output_path = Path("../data/output.json")
 
+if __name__ == "__main__":
+    pdf_path = Path("data/doc.pdf")
+    output_path = Path("data/output.json")
     data = extract_pdf(pdf_path)
     save_json(data, output_path)
-
     print(f"Extracted {data['numberOfPages']} pages.")
