@@ -1,5 +1,7 @@
 from fastapi.testclient import TestClient
 from evidence_bureau.api import app
+from evidence_bureau.resources import collection
+import pymupdf
 import json
 
 client = TestClient(app)
@@ -15,6 +17,7 @@ def test_health():
     assert data["status"] == "ok"
     assert "model" in data
     assert "collection_count" in data
+
 
 def test_ask():
     response = client.post(
@@ -40,6 +43,7 @@ def test_ask():
     assert "retrieved_ids" in data["retrieval"]
     assert "reranked_ids" in data["retrieval"]
 
+
 def test_empty_question_rejected():
     response = client.post(
         "/ask",
@@ -51,9 +55,8 @@ def test_empty_question_rejected():
 
     assert response.status_code == 422
 
-def test_streaming_ask():
-    import json
 
+def test_streaming_ask():
     with client.stream(
         "POST",
         "/ask",
@@ -94,3 +97,94 @@ def test_streaming_ask():
     assert "start" in event_types
     assert "token" in event_types
     assert "done" in event_types
+
+
+# --------------------------------------------------
+# Document upload / processing tests
+# --------------------------------------------------
+
+def create_test_pdf() -> bytes:
+    doc = pymupdf.open()
+
+    page = doc.new_page()
+    page.insert_text(
+        (72, 72),
+        "Evidence Bureau API test document. "
+        "The capital of France is Paris."
+    )
+
+    pdf_bytes = doc.tobytes()
+    doc.close()
+
+    return pdf_bytes
+
+
+def test_process_document_endpoint():
+    pdf_bytes = create_test_pdf()
+
+    response = client.post(
+        "/process_document",
+        files={
+            "file": (
+                "api_test.pdf",
+                pdf_bytes,
+                "application/pdf",
+            )
+        },
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["status"] == "success"
+    assert data["filename"].endswith("_api_test.pdf")
+    assert data["pages"] == 1
+    assert data["chunks_stored"] > 0
+    assert data["source_id"]
+
+    stored = collection.get(
+        where={"source_id": data["source_id"]}
+    )
+
+    assert len(stored["ids"]) == data["chunks_stored"]
+    assert len(stored["documents"]) == data["chunks_stored"]
+    assert len(stored["metadatas"]) == data["chunks_stored"]
+
+    for metadata in stored["metadatas"]:
+        assert metadata["source_id"] == data["source_id"]
+        assert metadata["filename"].endswith("_api_test.pdf")
+
+
+def test_process_document_rejects_non_pdf():
+    response = client.post(
+        "/process_document",
+        files={
+            "file": (
+                "test.txt",
+                b"This is not a PDF.",
+                "text/plain",
+            )
+        },
+    )
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Only PDF files are supported."
+
+
+def test_process_document_rejects_large_file():
+    large_file = b"x" * (26 * 1024 * 1024)
+
+    response = client.post(
+        "/process_document",
+        files={
+            "file": (
+                "large.pdf",
+                large_file,
+                "application/pdf",
+            )
+        },
+    )
+
+    assert response.status_code == 400
+    assert "File too large" in response.json()["detail"]
