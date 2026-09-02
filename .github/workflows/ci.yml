@@ -6,7 +6,14 @@ on:
 
 jobs:
   test:
+    name: Run tests
     runs-on: ubuntu-latest
+
+    services:
+      ollama:
+        image: ollama/ollama:latest
+        ports:
+          - 11434:11434
 
     steps:
       - name: Checkout repository
@@ -18,15 +25,35 @@ jobs:
           python-version: "3.12"
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v7
 
       - name: Install dependencies
         run: uv sync --frozen
 
+      - name: Wait for Ollama
+        run: |
+          for i in {1..30}; do
+            if curl -sf http://localhost:11434/api/tags > /dev/null; then
+              echo "Ollama is ready"
+              break
+            fi
+            echo "Waiting for Ollama..."
+            sleep 2
+          done
+
+      - name: Pull chat model
+        run: |
+          curl http://localhost:11434/api/pull \
+            -d '{"name":"qwen3.5:4b","stream":false}'
+
       - name: Run tests
+        env:
+          OLLAMA_HOST: http://localhost:11434
+          CHAT_MODEL: qwen3.5:4b
         run: uv run pytest
 
   docker:
+    name: Build Docker images
     runs-on: ubuntu-latest
 
     steps:
@@ -34,7 +61,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build backend image
-        run: docker build -f Dockerfile.backend -t evidence-bureau-backend .
+        run: |
+          docker build \
+            -f Dockerfile.backend \
+            -t evidence-bureau-backend .
 
       - name: Build frontend image
-        run: docker build -t evidence-bureau-frontend ./frontend
+        run: |
+          docker build \
+            -f frontend/Dockerfile \
+            -t evidence-bureau-frontend \
+            ./frontend
