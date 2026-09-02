@@ -23,7 +23,7 @@ def test_ask():
     response = client.post(
         "/ask",
         json={
-            "question": "What game is the simulation inspired by?",
+            "question": "What is the capital of France?",
             "stream": False,
         },
     )
