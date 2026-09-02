@@ -3,6 +3,7 @@ from evidence_bureau.api import app
 from evidence_bureau.resources import collection
 import pymupdf
 import json
+from types import SimpleNamespace
 
 client = TestClient(app)
 
@@ -19,11 +20,24 @@ def test_health():
     assert "collection_count" in data
 
 
-def test_ask():
+def test_ask(monkeypatch):
+
+    def fake_chat(*args, **kwargs):
+        return SimpleNamespace(
+            message=SimpleNamespace(
+                content="The simulation is inspired by Spyfall."
+            )
+        )
+
+    monkeypatch.setattr(
+        "evidence_bureau.slm.ollama_client.chat",
+        fake_chat,
+    )
+
     response = client.post(
         "/ask",
         json={
-            "question": "What is the capital of France?",
+            "question": "What game is the simulation inspired by?",
             "stream": False,
         },
     )
@@ -39,7 +53,6 @@ def test_ask():
     assert data["trace_id"]
 
     assert "retrieval" in data
-
     assert "retrieved_ids" in data["retrieval"]
     assert "reranked_ids" in data["retrieval"]
 
@@ -56,7 +69,27 @@ def test_empty_question_rejected():
     assert response.status_code == 422
 
 
-def test_streaming_ask():
+def test_streaming_ask(monkeypatch):
+
+    def fake_chat(*args, **kwargs):
+        return iter([
+            {
+                "message": {
+                    "content": "The simulation "
+                }
+            },
+            {
+                "message": {
+                    "content": "is inspired by Spyfall."
+                }
+            },
+        ])
+
+    monkeypatch.setattr(
+        "evidence_bureau.slm.ollama_client.chat",
+        fake_chat,
+    )
+
     with client.stream(
         "POST",
         "/ask",
@@ -97,6 +130,13 @@ def test_streaming_ask():
     assert "start" in event_types
     assert "token" in event_types
     assert "done" in event_types
+
+    done_event = next(
+        event for event in parsed_events
+        if event["event"] == "done"
+    )
+
+    assert done_event["answer"]
 
 
 # --------------------------------------------------
