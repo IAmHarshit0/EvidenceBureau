@@ -1,8 +1,7 @@
 import json
-import ollama
 from pathlib import Path
 from datetime import datetime
-from evidence_bureau.resources import collection, embed_model, reranker, CHAT_MODEL
+from evidence_bureau.resources import collection, embed_model, reranker, CHAT_MODEL, ollama_client
 from evidence_bureau.telemetry import (
     start_trace, finish_trace, save_trace, start_timer, elapsed_ms, record_error
 )
@@ -97,7 +96,7 @@ def generate_answer(question: str, retrieve_n: int = None, rerank_k: int = None)
 
     generation_timer = start_timer()
     try:
-        response = ollama.chat(model=CHAT_MODEL, messages=messages, options={"repeat_penalty": 1.3})
+        response = ollama_client.chat(model=CHAT_MODEL, messages=messages, options={"repeat_penalty": 1.3})
         answer = response.message.content
     except Exception as e:
         trace["generation_ms"] = elapsed_ms(generation_timer)
@@ -147,7 +146,7 @@ def stream_answer(question: str, retrieve_n: int = None, rerank_k: int = None):
     full_answer = ""
 
     try:
-        for chunk in ollama.chat(model=CHAT_MODEL, messages=messages, options={"repeat_penalty": 1.3}, stream=True):
+        for chunk in ollama_client.chat(model=CHAT_MODEL, messages=messages, options={"repeat_penalty": 1.3}, stream=True):
             piece = chunk["message"]["content"]
             full_answer += piece
             yield {"event": "token", "content": piece}
